@@ -6,7 +6,7 @@ import { WIDGETS } from './widgets/registry';
 
 function readSavedState() {
   try {
-    const saved = JSON.parse(localStorage.getItem('plan-v2-state'));
+    const saved = JSON.parse(localStorage.getItem('vion-state-v1'));
     return saved && typeof saved === 'object' ? saved : {};
   } catch {
     return {};
@@ -26,7 +26,7 @@ export default function AppV2() {
   const activeWidgets = widgetsByPage[activePage] || [];
 
   const persist = (next) => {
-    localStorage.setItem('plan-v2-state', JSON.stringify(next));
+    localStorage.setItem('vion-state-v1', JSON.stringify(next));
   };
 
   const updateWidgets = (nextWidgets) => {
