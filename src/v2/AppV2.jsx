@@ -28,7 +28,6 @@ export default function AppV2() {
   const [widgetsByPage, setWidgetsByPage] = useState(saved.widgetsByPage || DEFAULT_WIDGETS);
   const [isEditing, setIsEditing] = useState(false);
   const [showAddWidget, setShowAddWidget] = useState(false);
-  const [showThemePanel, setShowThemePanel] = useState(false);
   const [themeMode, setThemeMode] = useState(saved.themeMode || 'system');
   const [accent, setAccent] = useState(saved.accent || '#4f6bff');
   const [newPageName, setNewPageName] = useState('');
@@ -112,7 +111,6 @@ export default function AppV2() {
           <div className="v2-breadcrumb">Çalışma alanı <span>/</span> {activePageInfo.label}</div>
           <div className="v2-top-actions">
             <button type="button" className="v2-secondary">Bugün</button>
-            <button type="button" className="v2-secondary" onClick={() => setShowThemePanel(value => !value)}>Tema</button>
             <button type="button" className={isEditing ? 'v2-primary active' : 'v2-primary'} onClick={() => setIsEditing(value => !value)}>
               {isEditing ? 'Düzenlemeyi bitir' : 'Düzenle'}
             </button>
@@ -125,28 +123,31 @@ export default function AppV2() {
             {isEditing && <button type="button" className="v2-add" onClick={() => setShowAddWidget(true)}>＋ Widget ekle</button>}
           </div>
 
-          <div className="v2-widget-grid">
+          {activePage === 'settings' ? (
+            <section className="v2-settings-page">
+              <div className="v2-settings-card">
+                <div className="v2-settings-card-heading">
+                  <div><p className="v2-eyebrow">Görünüm</p><h2>Tema ayarları</h2><p>Vion. görünümünü açık, koyu veya sistem tercihinle kullan.</p></div>
+                  <span className="v2-settings-preview" style={{ background: accent }} />
+                </div>
+                <div className="v2-theme-modes">
+                  {['system', 'light', 'dark'].map(mode => <button type="button" key={mode} className={themeMode === mode ? 'active' : ''} onClick={() => setThemeMode(mode)}>{mode === 'system' ? 'Sistem' : mode === 'light' ? 'Açık' : 'Koyu'}</button>)}
+                </div>
+                <p className="v2-theme-label">Vurgu rengi</p>
+                <div className="v2-theme-swatches">{THEME_PRESETS.map(theme => <button type="button" key={theme.id} aria-label={theme.label} className={accent === theme.color ? 'selected' : ''} style={{ '--swatch': theme.color }} onClick={() => setAccent(theme.color)} />)}</div>
+                <label className="v2-custom-color">Özel renk<input type="color" value={accent} onChange={event => setAccent(event.target.value)} /></label>
+              </div>
+            </section>
+          ) : <div className="v2-widget-grid">
             {activeWidgets.map(widgetId => {
               const widget = WIDGETS[widgetId];
               if (!widget) return null;
               const WidgetComponent = widget.Component;
               return <WidgetShell widget={widget} isEditing={isEditing} onRemove={() => removeWidget(widgetId)} key={widgetId}><WidgetComponent /></WidgetShell>;
             })}
-          </div>
+          </div>}
         </section>
       </main>
-
-      {showThemePanel && (
-        <div className="v2-theme-panel">
-          <div className="v2-theme-panel-heading"><div><p className="v2-eyebrow">Görünüm</p><h2>Tema ayarları</h2></div><button type="button" onClick={() => setShowThemePanel(false)}>×</button></div>
-          <div className="v2-theme-modes">
-            {['system', 'light', 'dark'].map(mode => <button type="button" key={mode} className={themeMode === mode ? 'active' : ''} onClick={() => setThemeMode(mode)}>{mode === 'system' ? 'Sistem' : mode === 'light' ? 'Açık' : 'Koyu'}</button>)}
-          </div>
-          <p className="v2-theme-label">Vurgu rengi</p>
-          <div className="v2-theme-swatches">{THEME_PRESETS.map(theme => <button type="button" key={theme.id} aria-label={theme.label} className={accent === theme.color ? 'selected' : ''} style={{ '--swatch': theme.color }} onClick={() => setAccent(theme.color)} />)}</div>
-          <label className="v2-custom-color">Özel renk<input type="color" value={accent} onChange={event => setAccent(event.target.value)} /></label>
-        </div>
-      )}
 
       {showAddWidget && (
         <div className="v2-modal-backdrop" onClick={() => setShowAddWidget(false)}>

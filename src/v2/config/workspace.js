@@ -5,6 +5,7 @@ export const PAGE_DEFINITIONS = [
   { id: 'notes', label: 'Notlar', icon: '▤', description: 'Düşüncelerini, fikirlerini ve günlük notlarını kaydet.' },
   { id: 'goals', label: 'Hedefler', icon: '◎', description: 'Büyük hedeflerini küçük ve ölçülebilir adımlara böl.' },
   { id: 'areas', label: 'Alanlar', icon: '▥', description: 'Eğitim, spor, kişisel ve iş alanlarını birlikte yönet.' },
+  { id: 'settings', label: 'Ayarlar', icon: '⚙', description: 'Vion. görünümünü ve çalışma alanı tercihlerini yönet.' },
 ];
 
 export const DEFAULT_WIDGETS = {
@@ -14,4 +15,5 @@ export const DEFAULT_WIDGETS = {
   notes: ['journal', 'focus'],
   goals: ['goals', 'focus'],
   areas: ['balance', 'goals', 'routine'],
+  settings: [],
 };
