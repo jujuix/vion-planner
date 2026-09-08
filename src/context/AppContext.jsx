@@ -6,7 +6,7 @@ import { useAuth } from './AuthContext';
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-  const { user } = useAuth();
+  const { user, isDemoMode } = useAuth();
   const [language, setLanguageState] = useState(() => localStorage.getItem('vion-language') || 'tr');
   const setLanguage = (nextLanguage) => {
     setLanguageState(nextLanguage);
@@ -222,7 +222,11 @@ export const AppProvider = ({ children }) => {
   const [appDataLoaded, setAppDataLoaded] = useState(false);
 
   useEffect(() => {
-    if (!user) { setProfileLoaded(false); setAppDataLoaded(false); return; }
+    if (!user || isDemoMode) {
+      setProfileLoaded(isDemoMode);
+      setAppDataLoaded(isDemoMode);
+      return;
+    }
 
     const loadUserData = async () => {
       const [{ data: profile }, { data: savedState, error: stateError }] = await Promise.all([
@@ -292,10 +296,10 @@ export const AppProvider = ({ children }) => {
     };
 
     loadUserData();
-  }, [user]);
+  }, [user, isDemoMode]);
 
   useEffect(() => {
-    if (!user || !profileLoaded) return;
+    if (!user || isDemoMode || !profileLoaded) return;
     supabase.from('profiles').upsert({
       id: user.id,
       user_name: userName,
@@ -307,9 +311,9 @@ export const AppProvider = ({ children }) => {
     }, { onConflict: 'id' }).then(({ error }) => {
       if (error) console.error('Profil kaydedilemedi:', error);
     });
-  }, [userName, userAvatar, theme, accentColor, iconStyle, language, user, profileLoaded]);
+  }, [userName, userAvatar, theme, accentColor, iconStyle, language, user, isDemoMode, profileLoaded]);
   useEffect(() => {
-    if (!user || !appDataLoaded) return;
+    if (!user || isDemoMode || !appDataLoaded) return;
     const data = { pages, tabs, widgetLayouts, activeTabByPage, categories, tasks, panelData, dersData, isData, sportData, personalData, weeklyHabits, monthlyHabits, timelineProjects, uiScale };
     supabase.from('widget_data').upsert({
       user_id: user.id,
@@ -320,7 +324,7 @@ export const AppProvider = ({ children }) => {
     }, { onConflict: 'user_id,widget_id,panel_id' }).then(({ error }) => {
       if (error) console.error('Uygulama verileri kaydedilemedi:', error);
     });
-  }, [user, appDataLoaded, pages, tabs, widgetLayouts, activeTabByPage, categories, tasks, panelData, dersData, isData, sportData, personalData, weeklyHabits, monthlyHabits, timelineProjects, uiScale]);
+  }, [user, isDemoMode, appDataLoaded, pages, tabs, widgetLayouts, activeTabByPage, categories, tasks, panelData, dersData, isData, sportData, personalData, weeklyHabits, monthlyHabits, timelineProjects, uiScale]);
 
   const simgesi = (emoji) => {
     if (iconStyle === "svg") {

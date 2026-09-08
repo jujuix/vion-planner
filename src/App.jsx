@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState, useEffect, useRef } from 'react';
+import { lazy, Suspense, useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { useApp } from './context/AppContext';
 import { useAuth } from './context/AuthContext';
 import { LoginScreen } from './components/LoginScreen';
@@ -115,11 +115,19 @@ export default function App() {
 
   const recalcMasonry = () => {
     const grid = widgetGridRef.current;
-    if (!grid) return;
+    if (!grid) return false;
 
-    grid.querySelectorAll(':scope > .widget-kutu').forEach(element => {
+    const elements = [...grid.querySelectorAll(':scope > .widget-kutu')];
+    if (!elements.length) return false;
+
+    let everyWidgetMeasured = true;
+    elements.forEach(element => {
       const content = element.querySelector(':scope > .widget-icerik');
-      if (!content) return;
+      if (!content || content.getBoundingClientRect().height === 0) {
+        everyWidgetMeasured = false;
+        return;
+      }
+
       const toolbarHeight = element.querySelector(':scope > .widget-arac-cubugu')?.scrollHeight || 0;
       const styles = getComputedStyle(element);
       const verticalBoxSpace = parseFloat(styles.paddingTop) + parseFloat(styles.paddingBottom)
@@ -129,12 +137,13 @@ export default function App() {
       const rowSpan = Math.max(1, Math.ceil(
         (toolbarHeight + contentHeight + masonryRowGap) / (masonryRowHeight + masonryRowGap)
       ));
-      const nextRowEnd = `span ${rowSpan}`;
-      if (element.style.gridRowEnd !== nextRowEnd) element.style.gridRowEnd = nextRowEnd;
+      element.style.gridRowEnd = `span ${rowSpan}`;
     });
+
+    return everyWidgetMeasured;
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let firstFrame;
     let secondFrame;
     let firstTimeout;
@@ -142,29 +151,32 @@ export default function App() {
     let resizeObserver;
     let mutationObserver;
 
-    const scheduleRecalc = () => {
+    setMasonryReadyFor(null);
+
+    const measureAndReady = () => {
       cancelAnimationFrame(firstFrame);
       cancelAnimationFrame(secondFrame);
       firstFrame = requestAnimationFrame(() => {
-        recalcMasonry();
-        setMasonryReadyFor(currentTabId);
-        secondFrame = requestAnimationFrame(recalcMasonry);
+        secondFrame = requestAnimationFrame(() => {
+          if (recalcMasonry()) setMasonryReadyFor(currentTabId);
+        });
       });
-      firstTimeout = window.setTimeout(recalcMasonry, 80);
-      secondTimeout = window.setTimeout(recalcMasonry, 300);
     };
 
-    scheduleRecalc();
+    measureAndReady();
+    firstTimeout = window.setTimeout(measureAndReady, 80);
+    secondTimeout = window.setTimeout(measureAndReady, 300);
+
     if (typeof ResizeObserver !== 'undefined') {
-      resizeObserver = new ResizeObserver(scheduleRecalc);
+      resizeObserver = new ResizeObserver(measureAndReady);
       if (widgetGridRef.current) resizeObserver.observe(widgetGridRef.current);
       widgetGridRef.current?.querySelectorAll('.widget-kutu, .widget-icerik').forEach(element => resizeObserver.observe(element));
     }
     if (typeof MutationObserver !== 'undefined' && widgetGridRef.current) {
-      mutationObserver = new MutationObserver(scheduleRecalc);
+      mutationObserver = new MutationObserver(measureAndReady);
       mutationObserver.observe(widgetGridRef.current, { childList: true, subtree: true });
     }
-    window.addEventListener('resize', scheduleRecalc);
+    window.addEventListener('resize', measureAndReady);
 
     return () => {
       cancelAnimationFrame(firstFrame);
@@ -173,10 +185,9 @@ export default function App() {
       window.clearTimeout(secondTimeout);
       resizeObserver?.disconnect();
       mutationObserver?.disconnect();
-      window.removeEventListener('resize', scheduleRecalc);
+      window.removeEventListener('resize', measureAndReady);
     };
   }, [activeWidgets, currentTabId, isEditMode]);
-
 
   const moveWidget = (widgetId, direction) => {
     const layout = widgetLayouts[currentTabId] || [];

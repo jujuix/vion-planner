@@ -6077,15 +6077,15 @@ input[type="number"] {
 .widget-grid {
   display: grid !important;
   grid-template-columns: repeat(6, 1fr) !important;
-        grid-auto-flow: dense;
-        grid-auto-rows: 8px !important;
+                grid-auto-flow: dense;
+                grid-auto-rows: 8px !important;
     gap: 18px !important;
   align-items: start;
 }
 
 .widget-grid:not(.masonry-ready) {
-    grid-auto-flow: row !important;
-    grid-auto-rows: auto !important;
+        grid-auto-flow: row !important;
+        grid-auto-rows: auto !important;
 }
 
 /* --- ÖZEL KAYDIRMA ÇUBUĞU (YÜZEN TASARIM) --- */
