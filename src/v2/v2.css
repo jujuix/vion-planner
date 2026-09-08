@@ -1,5 +1,5 @@
 :root {
-  --v2-bg: #e6eaf6;
+  --v2-bg: color-mix(in srgb, #f7f8fc 93%, var(--v2-accent));
   --v2-surface: #ffffff;
   --v2-border: #dce2f0;
   --v2-text: #0f172a;
@@ -7,9 +7,9 @@
   --v2-accent: #4f6bff;
   --v2-accent-soft: #4f6bff20;
   --v2-accent-pale: #4f6bff12;
-  --v2-sidebar-bg: #0f172a;
-  --v2-sidebar-border: #1d2a45;
-  --v2-sidebar-active: #1c2b50;
+  --v2-sidebar-bg: color-mix(in srgb, #0f172a 82%, var(--v2-accent));
+  --v2-sidebar-border: color-mix(in srgb, #1d2a45 70%, var(--v2-accent));
+  --v2-sidebar-active: color-mix(in srgb, #1c2b50 65%, var(--v2-accent));
   --v2-widget-soft: #e8edff;
   --v2-sidebar: 248px;
 }
@@ -41,14 +41,14 @@
 .v2-widget-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: start; }.v2-widget { min-height: 196px; padding: 22px; border: 1px solid var(--v2-border); border-radius: 18px; background: var(--v2-surface); box-shadow: 0 10px 30px rgba(37, 43, 75, .04); }.v2-widget:nth-child(1) { grid-column: span 2; }.v2-widget-header { display: flex; align-items: flex-start; gap: 12px; }.v2-widget-icon { display: grid; place-items: center; flex: 0 0 38px; width: 38px; height: 38px; border-radius: 12px; background: var(--v2-widget-soft); color: var(--v2-accent); font-size: 18px; }.v2-widget h2 { margin: 1px 0 4px; font-size: 15px; }.v2-widget p { margin: 0; color: var(--v2-muted); font-size: 11px; }.v2-remove { margin-left: auto; border: 0; background: transparent; color: #a8afc0; font-size: 22px; cursor: pointer; }.v2-widget-body { display: grid; gap: 10px; margin-top: 30px; min-height: 92px; }.v2-mint .v2-widget-icon, .v2-blue .v2-widget-icon, .v2-orange .v2-widget-icon, .v2-pink .v2-widget-icon, .v2-yellow .v2-widget-icon { background: var(--v2-widget-soft); color: var(--v2-accent); }
 .v2-theme-panel { position: fixed; top: 86px; right: 32px; z-index: 15; width: 265px; padding: 18px; border: 1px solid var(--v2-border); border-radius: 14px; background: var(--v2-surface); box-shadow: 0 18px 45px rgba(15, 23, 42, .16); }.v2-theme-panel-heading { display: flex; justify-content: space-between; align-items: start; }.v2-theme-panel h2 { margin: 0; font-size: 16px; }.v2-theme-panel-heading button { border: 0; background: transparent; color: var(--v2-muted); font-size: 20px; cursor: pointer; }.v2-theme-modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 16px 0; }.v2-theme-modes button { border: 1px solid var(--v2-border); border-radius: 7px; padding: 7px 4px; background: var(--v2-surface); color: var(--v2-muted); cursor: pointer; font: inherit; font-size: 10px; }.v2-theme-modes button.active { border-color: var(--v2-accent); background: var(--v2-accent-pale); color: var(--v2-accent); font-weight: 700; }.v2-theme-label { margin: 0 0 9px; color: var(--v2-muted); font-size: 10px; font-weight: 700; }.v2-theme-swatches { display: flex; gap: 10px; }.v2-theme-swatches button { width: 25px; height: 25px; border: 3px solid transparent; border-radius: 50%; background: var(--swatch); cursor: pointer; }.v2-theme-swatches button.selected { outline: 2px solid var(--swatch); outline-offset: 3px; }.v2-custom-color { display: flex; align-items: center; justify-content: space-between; margin-top: 17px; color: var(--v2-muted); font-size: 11px; }.v2-custom-color input { width: 34px; height: 25px; padding: 0; border: 0; background: transparent; cursor: pointer; }
 html[data-theme-mode="dark"] { color-scheme: dark; }
-html[data-theme-mode="dark"] .v2-shell { --v2-bg: #0b1220; --v2-surface: #111b2e; --v2-border: #243452; --v2-text: #edf2ff; --v2-muted: #9aa8c2; --v2-sidebar-bg: #08101e; --v2-sidebar-border: #1b2a46; --v2-sidebar-active: #1c376f; --v2-widget-soft: var(--v2-accent-soft); background: var(--v2-bg); color: var(--v2-text); }
+html[data-theme-mode="dark"] .v2-shell { --v2-bg: color-mix(in srgb, #0b1220 88%, var(--v2-accent)); --v2-surface: color-mix(in srgb, #111b2e 88%, var(--v2-accent)); --v2-border: color-mix(in srgb, #243452 72%, var(--v2-accent)); --v2-text: #edf2ff; --v2-muted: #9aa8c2; --v2-sidebar-bg: color-mix(in srgb, #08101e 72%, var(--v2-accent)); --v2-sidebar-border: color-mix(in srgb, #1b2a46 60%, var(--v2-accent)); --v2-sidebar-active: color-mix(in srgb, #1c376f 55%, var(--v2-accent)); --v2-widget-soft: var(--v2-accent-soft); background: var(--v2-bg); color: var(--v2-text); }
 html[data-theme-mode="dark"] .v2-sidebar { background: var(--v2-sidebar-bg); }
 html[data-theme-mode="dark"] .v2-topbar { background: rgba(17, 27, 46, .88); }
 html[data-theme-mode="dark"] .v2-secondary, html[data-theme-mode="dark"] .v2-new-page input, html[data-theme-mode="dark"] .v2-modal, html[data-theme-mode="dark"] .v2-theme-panel, html[data-theme-mode="dark"] .v2-theme-modes button, html[data-theme-mode="dark"] .v2-widget-options button { background: var(--v2-surface); color: var(--v2-text); }
 html[data-theme-mode="dark"] .v2-placeholder-line { background: #1c2941; }
 @media (prefers-color-scheme: dark) {
   html[data-theme-mode="system"] { color-scheme: dark; }
-  html[data-theme-mode="system"] .v2-shell { --v2-bg: #0b1220; --v2-surface: #111b2e; --v2-border: #243452; --v2-text: #edf2ff; --v2-muted: #9aa8c2; --v2-sidebar-bg: #08101e; --v2-sidebar-border: #1b2a46; --v2-sidebar-active: #1c376f; --v2-widget-soft: var(--v2-accent-soft); background: var(--v2-bg); color: var(--v2-text); }
+  html[data-theme-mode="system"] .v2-shell { --v2-bg: color-mix(in srgb, #0b1220 88%, var(--v2-accent)); --v2-surface: color-mix(in srgb, #111b2e 88%, var(--v2-accent)); --v2-border: color-mix(in srgb, #243452 72%, var(--v2-accent)); --v2-text: #edf2ff; --v2-muted: #9aa8c2; --v2-sidebar-bg: color-mix(in srgb, #08101e 72%, var(--v2-accent)); --v2-sidebar-border: color-mix(in srgb, #1b2a46 60%, var(--v2-accent)); --v2-sidebar-active: color-mix(in srgb, #1c376f 55%, var(--v2-accent)); --v2-widget-soft: var(--v2-accent-soft); background: var(--v2-bg); color: var(--v2-text); }
   html[data-theme-mode="system"] .v2-sidebar { background: var(--v2-sidebar-bg); }
   html[data-theme-mode="system"] .v2-topbar { background: rgba(17, 27, 46, .88); }
   html[data-theme-mode="system"] .v2-secondary, html[data-theme-mode="system"] .v2-modal, html[data-theme-mode="system"] .v2-theme-panel, html[data-theme-mode="system"] .v2-theme-modes button, html[data-theme-mode="system"] .v2-widget-options button { background: var(--v2-surface); color: var(--v2-text); }
