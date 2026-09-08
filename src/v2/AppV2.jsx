@@ -21,10 +21,18 @@ function readSavedState() {
   }
 }
 
+function mergePages(savedPages) {
+  if (!Array.isArray(savedPages)) return PAGE_DEFINITIONS;
+  const savedById = new Map(savedPages.map(page => [page.id, page]));
+  const knownPages = PAGE_DEFINITIONS.map(page => savedById.get(page.id) || page);
+  const customPages = savedPages.filter(page => !PAGE_DEFINITIONS.some(defaultPage => defaultPage.id === page.id));
+  return [...knownPages, ...customPages];
+}
+
 export default function AppV2() {
   const [saved] = useState(readSavedState);
   const [activePage, setActivePage] = useState(saved.activePage || 'overview');
-  const [pages, setPages] = useState(saved.pages || PAGE_DEFINITIONS);
+  const [pages, setPages] = useState(() => mergePages(saved.pages));
   const [widgetsByPage, setWidgetsByPage] = useState(saved.widgetsByPage || DEFAULT_WIDGETS);
   const [isEditing, setIsEditing] = useState(false);
   const [showAddWidget, setShowAddWidget] = useState(false);
